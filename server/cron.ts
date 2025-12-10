@@ -7,10 +7,9 @@ import type { Platform } from "@shared/schema";
 let cronJob: cron.ScheduledTask | null = null;
 
 export function startCronJobs() {
-  // Schedule daily script generation at 6 AM EST (11 AM UTC)
-  // EST is UTC-5, so 6 AM EST = 11 AM UTC
-  cronJob = cron.schedule("0 11 * * *", async () => {
-    console.log("Running daily script generation job...");
+  // Schedule script generation every 3 hours
+  cronJob = cron.schedule("0 */3 * * *", async () => {
+    console.log("Running scheduled script generation job...");
     
     try {
       const settings = await storage.getSettings();
@@ -50,11 +49,9 @@ export function startCronJobs() {
     } catch (error) {
       console.error("Error in daily script generation:", error);
     }
-  }, {
-    timezone: "America/New_York"
   });
   
-  console.log("Cron job scheduled: Daily script generation at 6 AM EST");
+  console.log("Cron job scheduled: Script generation every 3 hours");
 }
 
 export function stopCronJobs() {

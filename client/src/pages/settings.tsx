@@ -133,7 +133,7 @@ export default function SettingsPage() {
                 data-testid="input-admin-email"
               />
               <p className="text-xs text-muted-foreground">
-                Daily summary emails will be sent to this address at 6 AM EST
+                Summary emails will be sent to this address every 3 hours
               </p>
             </div>
             <Button
@@ -165,7 +165,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <CardTitle className="text-lg">Auto Generation</CardTitle>
-                <CardDescription>Automatic daily script generation</CardDescription>
+                <CardDescription>Automatic script generation every 3 hours</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -174,7 +174,7 @@ export default function SettingsPage() {
               <div className="space-y-0.5">
                 <Label>Enable Auto Generation</Label>
                 <p className="text-xs text-muted-foreground">
-                  Automatically generate scripts daily at 6 AM EST
+                  Automatically generate scripts every 3 hours
                 </p>
               </div>
               <Switch
@@ -203,7 +203,7 @@ export default function SettingsPage() {
                 data-testid="slider-daily-count"
               />
               <p className="text-xs text-muted-foreground">
-                Number of scripts to generate each day (1-15)
+                Number of scripts to generate every 3 hours (1-15)
               </p>
             </div>
           </CardContent>
