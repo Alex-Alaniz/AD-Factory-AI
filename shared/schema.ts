@@ -12,6 +12,10 @@ export type Platform = typeof platforms[number];
 export const scriptStatuses = ["pending", "used", "archived"] as const;
 export type ScriptStatus = typeof scriptStatuses[number];
 
+// Video generation status
+export const videoStatuses = ["none", "pending", "generating", "complete", "failed"] as const;
+export type VideoStatus = typeof videoStatuses[number];
+
 // Tone types for scripts
 export const tones = ["excited", "casual", "informative", "persuasive"] as const;
 export type Tone = typeof tones[number];
@@ -36,6 +40,10 @@ export interface Script {
   metadata: ScriptMetadata;
   createdAt: string;
   generatedBatch: string; // batch ID for grouping scripts generated together
+  // Video generation fields
+  videoStatus: VideoStatus;
+  videoUrl: string | null;
+  videoJobId: string | null;
 }
 
 // Insert schema for creating a new script
@@ -53,6 +61,9 @@ export const insertScriptSchema = z.object({
     wordCount: z.number(),
   }),
   generatedBatch: z.string(),
+  videoStatus: z.enum(videoStatuses).default("none"),
+  videoUrl: z.string().nullable().default(null),
+  videoJobId: z.string().nullable().default(null),
 });
 
 export type InsertScript = z.infer<typeof insertScriptSchema>;
@@ -64,14 +75,19 @@ export interface Settings {
   autoGenerateEnabled: boolean;
   productFeatures: string;
   lastUpdated: string;
+  // Arcads integration (API key stored as secret, not here)
+  arcadsAvatarId: string;
+  autoGenerateVideos: boolean;
 }
 
 // Insert schema for settings
 export const insertSettingsSchema = z.object({
-  adminEmail: z.string().email(),
+  adminEmail: z.string().email().or(z.literal("")),
   dailyScriptCount: z.number().min(1).max(20).default(8),
   autoGenerateEnabled: z.boolean().default(true),
   productFeatures: z.string().default(""),
+  arcadsAvatarId: z.string().default(""),
+  autoGenerateVideos: z.boolean().default(false),
 });
 
 export type InsertSettings = z.infer<typeof insertSettingsSchema>;
@@ -98,6 +114,8 @@ export interface DashboardStats {
   archivedScripts: number;
   scriptsToday: number;
   lastGeneration: string | null;
+  videosGenerating: number;
+  videosComplete: number;
 }
 
 // Email notification data
@@ -106,6 +124,18 @@ export interface EmailNotificationData {
   topHooks: string[];
   dashboardUrl: string;
   generatedAt: string;
+}
+
+// Arcads API types
+export interface ArcadsVideoRequest {
+  script: string;
+  avatarId: string;
+}
+
+export interface ArcadsVideoResponse {
+  jobId: string;
+  status: string;
+  videoUrl?: string;
 }
 
 // Keep legacy user schema for compatibility

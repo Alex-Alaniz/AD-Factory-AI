@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Save, Loader2, Mail, Zap, Clock, TestTube } from "lucide-react";
+import { Save, Loader2, Mail, Zap, Clock, TestTube, Video, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Settings } from "@shared/schema";
@@ -21,11 +22,17 @@ export default function SettingsPage() {
     queryKey: ["/api/settings"],
   });
 
+  const { data: arcadsStatus } = useQuery<{ configured: boolean }>({
+    queryKey: ["/api/arcads/status"],
+  });
+
   const [formData, setFormData] = useState({
     adminEmail: "",
     dailyScriptCount: 8,
     autoGenerateEnabled: true,
     productFeatures: "",
+    arcadsAvatarId: "",
+    autoGenerateVideos: false,
   });
 
   useEffect(() => {
@@ -35,6 +42,8 @@ export default function SettingsPage() {
         dailyScriptCount: settings.dailyScriptCount || 8,
         autoGenerateEnabled: settings.autoGenerateEnabled ?? true,
         productFeatures: settings.productFeatures || "",
+        arcadsAvatarId: settings.arcadsAvatarId || "",
+        autoGenerateVideos: settings.autoGenerateVideos ?? false,
       });
     }
   }, [settings]);
@@ -188,7 +197,7 @@ export default function SettingsPage() {
             <Separator />
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-4">
-                <Label>Daily Script Count</Label>
+                <Label>Script Count</Label>
                 <span className="text-sm font-medium" data-testid="text-daily-count">{formData.dailyScriptCount}</span>
               </div>
               <Slider
@@ -209,7 +218,75 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Video className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-lg">Arcads.ai Integration</CardTitle>
+                  {arcadsStatus?.configured ? (
+                    <Badge variant="outline" className="border-green-500/20 bg-green-500/10 text-green-400">
+                      <CheckCircle className="mr-1 h-3 w-3" />
+                      Connected
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="border-yellow-500/20 bg-yellow-500/10 text-yellow-400">
+                      <XCircle className="mr-1 h-3 w-3" />
+                      Not Connected
+                    </Badge>
+                  )}
+                </div>
+                <CardDescription>Generate AI UGC videos from scripts</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="arcadsAvatarId">Avatar ID</Label>
+              <Input
+                id="arcadsAvatarId"
+                value={formData.arcadsAvatarId}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, arcadsAvatarId: e.target.value }))
+                }
+                placeholder="default"
+                data-testid="input-arcads-avatar"
+              />
+              <p className="text-xs text-muted-foreground">
+                The AI avatar to use for video generation (leave empty for default)
+              </p>
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-0.5">
+                <Label>Auto-Generate Videos</Label>
+                <p className="text-xs text-muted-foreground">
+                  Automatically create videos for new scripts
+                </p>
+              </div>
+              <Switch
+                checked={formData.autoGenerateVideos}
+                onCheckedChange={(checked) =>
+                  setFormData((prev) => ({ ...prev, autoGenerateVideos: checked }))
+                }
+                disabled={!arcadsStatus?.configured}
+                data-testid="switch-auto-videos"
+              />
+            </div>
+            {!arcadsStatus?.configured && (
+              <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3">
+                <p className="text-xs text-yellow-400">
+                  To enable video generation, add your Arcads API key as a secret named ARCADS_API_KEY in your environment settings.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-1">
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -218,7 +295,7 @@ export default function SettingsPage() {
               <div>
                 <CardTitle className="text-lg">Default Product Features</CardTitle>
                 <CardDescription>
-                  These features will be used as defaults for script generation
+                  Features used for script generation
                 </CardDescription>
               </div>
             </div>
@@ -233,11 +310,11 @@ export default function SettingsPage() {
                   setFormData((prev) => ({ ...prev, productFeatures: e.target.value }))
                 }
                 placeholder="Enter your product's key features, unique selling points, and marketing angles..."
-                className="min-h-[160px] resize-none"
+                className="min-h-[120px] resize-none"
                 data-testid="textarea-features"
               />
               <p className="text-xs text-muted-foreground">
-                Tip: Include specific features, benefits, and target audience pain points for better script quality
+                Tip: Include specific features and benefits for better script quality
               </p>
             </div>
           </CardContent>

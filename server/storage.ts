@@ -44,21 +44,25 @@ function saveScripts(scripts: Script[]) {
 
 function loadSettings(): Settings {
   ensureDataDir();
-  try {
-    if (fs.existsSync(SETTINGS_FILE)) {
-      const data = fs.readFileSync(SETTINGS_FILE, "utf-8");
-      return JSON.parse(data);
-    }
-  } catch (error) {
-    console.error("Error loading settings:", error);
-  }
-  return {
+  const defaults: Settings = {
     adminEmail: "",
     dailyScriptCount: 8,
     autoGenerateEnabled: true,
     productFeatures: "instant payments, HONEY stablecoin currency, zero fees, $BEARCO memecoin integration",
     lastUpdated: new Date().toISOString(),
+    arcadsAvatarId: "",
+    autoGenerateVideos: false,
   };
+  try {
+    if (fs.existsSync(SETTINGS_FILE)) {
+      const data = fs.readFileSync(SETTINGS_FILE, "utf-8");
+      const saved = JSON.parse(data);
+      return { ...defaults, ...saved };
+    }
+  } catch (error) {
+    console.error("Error loading settings:", error);
+  }
+  return defaults;
 }
 
 function saveSettings(settings: Settings) {
@@ -74,6 +78,8 @@ export interface IStorage {
   createScript(script: InsertScript): Promise<Script>;
   createManyScripts(scripts: InsertScript[]): Promise<Script[]>;
   updateScriptStatus(id: string, status: Script["status"]): Promise<Script | undefined>;
+  updateScriptVideo(id: string, videoStatus: Script["videoStatus"], videoUrl: string | null, videoJobId: string | null): Promise<Script | undefined>;
+  getScriptsWithPendingVideos(): Promise<Script[]>;
   deleteScript(id: string): Promise<boolean>;
   
   // Settings
@@ -117,6 +123,9 @@ export class FileStorage implements IStorage {
       ...insertScript,
       id: randomUUID(),
       createdAt: new Date().toISOString(),
+      videoStatus: insertScript.videoStatus || "none",
+      videoUrl: insertScript.videoUrl || null,
+      videoJobId: insertScript.videoJobId || null,
     };
     this.scripts.push(script);
     saveScripts(this.scripts);
@@ -132,6 +141,9 @@ export class FileStorage implements IStorage {
       ...s,
       id: randomUUID(),
       createdAt: new Date().toISOString(),
+      videoStatus: s.videoStatus || "none",
+      videoUrl: s.videoUrl || null,
+      videoJobId: s.videoJobId || null,
     }));
     
     this.scripts.push(...newScripts);
@@ -188,6 +200,8 @@ export class FileStorage implements IStorage {
       dailyScriptCount: insertSettings.dailyScriptCount ?? this.settings.dailyScriptCount,
       autoGenerateEnabled: insertSettings.autoGenerateEnabled ?? this.settings.autoGenerateEnabled,
       productFeatures: insertSettings.productFeatures ?? this.settings.productFeatures,
+      arcadsAvatarId: insertSettings.arcadsAvatarId ?? this.settings.arcadsAvatarId,
+      autoGenerateVideos: insertSettings.autoGenerateVideos ?? this.settings.autoGenerateVideos,
       lastUpdated: new Date().toISOString(),
     };
     saveSettings(this.settings);
@@ -213,7 +227,29 @@ export class FileStorage implements IStorage {
       archivedScripts: this.scripts.filter((s) => s.status === "archived").length,
       scriptsToday,
       lastGeneration: sortedScripts[0]?.createdAt || null,
+      videosGenerating: this.scripts.filter((s) => s.videoStatus === "generating" || s.videoStatus === "pending").length,
+      videosComplete: this.scripts.filter((s) => s.videoStatus === "complete").length,
     };
+  }
+
+  async updateScriptVideo(id: string, videoStatus: Script["videoStatus"], videoUrl: string | null, videoJobId: string | null): Promise<Script | undefined> {
+    const index = this.scripts.findIndex((s) => s.id === id);
+    if (index === -1) return undefined;
+    
+    this.scripts[index] = { 
+      ...this.scripts[index], 
+      videoStatus, 
+      videoUrl,
+      videoJobId 
+    };
+    saveScripts(this.scripts);
+    return this.scripts[index];
+  }
+
+  async getScriptsWithPendingVideos(): Promise<Script[]> {
+    return this.scripts.filter(
+      (s) => s.videoStatus === "pending" || s.videoStatus === "generating"
+    );
   }
 
   async exportScriptsToCSV(): Promise<string> {

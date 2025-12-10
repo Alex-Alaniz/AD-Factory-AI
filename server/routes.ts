@@ -4,9 +4,53 @@ import { storage } from "./storage";
 import { generateScripts } from "./openai";
 import { sendDailySummaryEmail, sendTestEmail } from "./resend";
 import { startCronJobs } from "./cron";
-import type { Platform, GenerationRequest } from "@shared/schema";
+import { createArcadsService } from "./arcads";
+import type { Platform, GenerationRequest, Script } from "@shared/schema";
 import { insertSettingsSchema } from "@shared/schema";
 import { z } from "zod";
+
+// Helper function to trigger video generation for scripts
+async function triggerVideoGeneration(scripts: Script[]): Promise<void> {
+  const settings = await storage.getSettings();
+  const apiKey = process.env.ARCADS_API_KEY;
+  
+  if (!apiKey || !settings.autoGenerateVideos) {
+    return;
+  }
+  
+  const arcads = createArcadsService(apiKey, settings.arcadsAvatarId || "default");
+  if (!arcads) return;
+  
+  for (const script of scripts) {
+    try {
+      // Mark as pending
+      await storage.updateScriptVideo(script.id, "pending", null, null);
+      
+      // Start generation (non-blocking)
+      arcads.generateVideo(script)
+        .then(async (response) => {
+          await storage.updateScriptVideo(script.id, "generating", null, response.jobId);
+          
+          // Poll for completion in background
+          arcads.pollVideoCompletion(response.jobId)
+            .then(async (result) => {
+              await storage.updateScriptVideo(script.id, "complete", result.videoUrl || null, result.jobId);
+              console.log(`Video complete for script ${script.id}: ${result.videoUrl}`);
+            })
+            .catch(async (err) => {
+              console.error(`Video generation failed for script ${script.id}:`, err);
+              await storage.updateScriptVideo(script.id, "failed", null, response.jobId);
+            });
+        })
+        .catch(async (err) => {
+          console.error(`Failed to start video generation for script ${script.id}:`, err);
+          await storage.updateScriptVideo(script.id, "failed", null, null);
+        });
+    } catch (error) {
+      console.error(`Error triggering video for script ${script.id}:`, error);
+    }
+  }
+}
 
 export async function registerRoutes(
   httpServer: Server,
@@ -51,6 +95,9 @@ export async function registerRoutes(
       const insertScripts = await generateScripts(productFeatures, count, platforms);
       const scripts = await storage.createManyScripts(insertScripts);
       
+      // Trigger video generation if enabled
+      triggerVideoGeneration(scripts).catch(console.error);
+      
       res.json({
         success: true,
         scripts,
@@ -64,6 +111,63 @@ export async function registerRoutes(
         error: error instanceof Error ? error.message : "Failed to generate scripts" 
       });
     }
+  });
+  
+  // Generate video for a specific script
+  app.post("/api/scripts/:id/generate-video", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const script = await storage.getScriptById(id);
+      
+      if (!script) {
+        return res.status(404).json({ error: "Script not found" });
+      }
+      
+      const apiKey = process.env.ARCADS_API_KEY;
+      if (!apiKey) {
+        return res.status(400).json({ error: "Arcads API key not configured" });
+      }
+      
+      const settings = await storage.getSettings();
+      const arcads = createArcadsService(apiKey, settings.arcadsAvatarId || "default");
+      
+      if (!arcads) {
+        return res.status(500).json({ error: "Failed to initialize Arcads service" });
+      }
+      
+      // Start generation
+      await storage.updateScriptVideo(id, "pending", null, null);
+      
+      const response = await arcads.generateVideo(script);
+      await storage.updateScriptVideo(id, "generating", null, response.jobId);
+      
+      res.json({
+        success: true,
+        message: "Video generation started",
+        jobId: response.jobId,
+      });
+      
+      // Poll in background
+      arcads.pollVideoCompletion(response.jobId)
+        .then(async (result) => {
+          await storage.updateScriptVideo(id, "complete", result.videoUrl || null, result.jobId);
+        })
+        .catch(async (err) => {
+          console.error(`Video generation failed:`, err);
+          await storage.updateScriptVideo(id, "failed", null, response.jobId);
+        });
+    } catch (error) {
+      console.error("Error generating video:", error);
+      res.status(500).json({ error: "Failed to generate video" });
+    }
+  });
+  
+  // Check Arcads API key status
+  app.get("/api/arcads/status", async (req, res) => {
+    const apiKey = process.env.ARCADS_API_KEY;
+    res.json({
+      configured: !!apiKey,
+    });
   });
   
   // Update script status
