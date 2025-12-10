@@ -52,6 +52,10 @@ function loadSettings(): Settings {
     lastUpdated: new Date().toISOString(),
     arcadsAvatarId: "",
     autoGenerateVideos: false,
+    wav2lipApiUrl: "",
+    wav2lipAvatarImageUrl: "",
+    wav2lipEnabled: false,
+    preferredVideoProvider: "arcads",
   };
   try {
     if (fs.existsSync(SETTINGS_FILE)) {
@@ -202,6 +206,10 @@ export class FileStorage implements IStorage {
       productFeatures: insertSettings.productFeatures ?? this.settings.productFeatures,
       arcadsAvatarId: insertSettings.arcadsAvatarId ?? this.settings.arcadsAvatarId,
       autoGenerateVideos: insertSettings.autoGenerateVideos ?? this.settings.autoGenerateVideos,
+      wav2lipApiUrl: insertSettings.wav2lipApiUrl ?? this.settings.wav2lipApiUrl,
+      wav2lipAvatarImageUrl: insertSettings.wav2lipAvatarImageUrl ?? this.settings.wav2lipAvatarImageUrl,
+      wav2lipEnabled: insertSettings.wav2lipEnabled ?? this.settings.wav2lipEnabled,
+      preferredVideoProvider: insertSettings.preferredVideoProvider ?? this.settings.preferredVideoProvider,
       lastUpdated: new Date().toISOString(),
     };
     saveSettings(this.settings);

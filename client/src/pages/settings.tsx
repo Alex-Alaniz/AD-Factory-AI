@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Save, Loader2, Mail, Zap, Clock, TestTube, Video, CheckCircle, XCircle } from "lucide-react";
+import { Save, Loader2, Mail, Zap, Clock, TestTube, Video, CheckCircle, XCircle, Server } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,6 +26,10 @@ export default function SettingsPage() {
     queryKey: ["/api/arcads/status"],
   });
 
+  const { data: wav2lipStatus } = useQuery<{ configured: boolean; enabled: boolean; apiUrl: string | null }>({
+    queryKey: ["/api/wav2lip/status"],
+  });
+
   const [formData, setFormData] = useState({
     adminEmail: "",
     dailyScriptCount: 8,
@@ -33,6 +37,9 @@ export default function SettingsPage() {
     productFeatures: "",
     arcadsAvatarId: "",
     autoGenerateVideos: false,
+    wav2lipApiUrl: "",
+    wav2lipAvatarImageUrl: "",
+    wav2lipEnabled: false,
   });
 
   useEffect(() => {
@@ -44,6 +51,9 @@ export default function SettingsPage() {
         productFeatures: settings.productFeatures || "",
         arcadsAvatarId: settings.arcadsAvatarId || "",
         autoGenerateVideos: settings.autoGenerateVideos ?? false,
+        wav2lipApiUrl: settings.wav2lipApiUrl || "",
+        wav2lipAvatarImageUrl: settings.wav2lipAvatarImageUrl || "",
+        wav2lipEnabled: settings.wav2lipEnabled ?? false,
       });
     }
   }, [settings]);
@@ -286,7 +296,88 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-1">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Server className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-lg">Wav2Lip Integration</CardTitle>
+                  {formData.wav2lipEnabled && formData.wav2lipApiUrl ? (
+                    <Badge variant="outline" className="border-green-500/20 bg-green-500/10 text-green-400">
+                      <CheckCircle className="mr-1 h-3 w-3" />
+                      Enabled
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="border-muted-foreground/20 bg-muted/10 text-muted-foreground">
+                      <XCircle className="mr-1 h-3 w-3" />
+                      Disabled
+                    </Badge>
+                  )}
+                </div>
+                <CardDescription>Self-hosted lip-sync video generation (open-source)</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="wav2lipApiUrl">Wav2Lip API URL</Label>
+              <Input
+                id="wav2lipApiUrl"
+                value={formData.wav2lipApiUrl}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, wav2lipApiUrl: e.target.value }))
+                }
+                placeholder="https://your-wav2lip-api.railway.app"
+                data-testid="input-wav2lip-url"
+              />
+              <p className="text-xs text-muted-foreground">
+                URL of your self-hosted Wav2Lip API (e.g., on Railway)
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="wav2lipAvatarImageUrl">Avatar Image URL</Label>
+              <Input
+                id="wav2lipAvatarImageUrl"
+                value={formData.wav2lipAvatarImageUrl}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, wav2lipAvatarImageUrl: e.target.value }))
+                }
+                placeholder="https://example.com/avatar.jpg"
+                data-testid="input-wav2lip-avatar"
+              />
+              <p className="text-xs text-muted-foreground">
+                URL to the avatar image for lip-sync video generation
+              </p>
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-0.5">
+                <Label>Enable Wav2Lip</Label>
+                <p className="text-xs text-muted-foreground">
+                  Show Wav2Lip video generation option on scripts
+                </p>
+              </div>
+              <Switch
+                checked={formData.wav2lipEnabled}
+                onCheckedChange={(checked) =>
+                  setFormData((prev) => ({ ...prev, wav2lipEnabled: checked }))
+                }
+                disabled={!formData.wav2lipApiUrl}
+                data-testid="switch-wav2lip-enabled"
+              />
+            </div>
+            <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 p-3">
+              <p className="text-xs text-blue-400">
+                Wav2Lip is open-source and free. Deploy on Railway with GPU support for best performance.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">

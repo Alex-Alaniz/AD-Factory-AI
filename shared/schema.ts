@@ -68,6 +68,10 @@ export const insertScriptSchema = z.object({
 
 export type InsertScript = z.infer<typeof insertScriptSchema>;
 
+// Video generation provider
+export const videoProviders = ["arcads", "wav2lip"] as const;
+export type VideoProvider = typeof videoProviders[number];
+
 // Settings interface
 export interface Settings {
   adminEmail: string;
@@ -78,6 +82,11 @@ export interface Settings {
   // Arcads integration (API key stored as secret, not here)
   arcadsAvatarId: string;
   autoGenerateVideos: boolean;
+  // Wav2Lip integration
+  wav2lipApiUrl: string; // Self-hosted Wav2Lip API endpoint URL
+  wav2lipAvatarImageUrl: string; // URL to avatar image for lip-sync
+  wav2lipEnabled: boolean; // Whether to use Wav2Lip for video generation
+  preferredVideoProvider: VideoProvider; // Which provider to use for auto-generation
 }
 
 // Insert schema for settings
@@ -88,6 +97,10 @@ export const insertSettingsSchema = z.object({
   productFeatures: z.string().default(""),
   arcadsAvatarId: z.string().default(""),
   autoGenerateVideos: z.boolean().default(false),
+  wav2lipApiUrl: z.string().default(""),
+  wav2lipAvatarImageUrl: z.string().default(""),
+  wav2lipEnabled: z.boolean().default(false),
+  preferredVideoProvider: z.enum(videoProviders).default("arcads"),
 });
 
 export type InsertSettings = z.infer<typeof insertSettingsSchema>;
@@ -136,6 +149,20 @@ export interface ArcadsVideoResponse {
   jobId: string;
   status: string;
   videoUrl?: string;
+}
+
+// Wav2Lip API types
+export interface Wav2LipVideoRequest {
+  scriptText: string;
+  avatarImageUrl: string;
+  voiceId?: string; // Optional voice selection for TTS
+}
+
+export interface Wav2LipVideoResponse {
+  jobId: string;
+  status: "pending" | "processing" | "complete" | "failed";
+  videoUrl?: string;
+  error?: string;
 }
 
 // Keep legacy user schema for compatibility

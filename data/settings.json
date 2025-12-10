@@ -3,5 +3,11 @@
   "dailyScriptCount": 8,
   "autoGenerateEnabled": true,
   "productFeatures": "instant payments, HONEY stablecoin currency, zero fees, $BEARCO memecoin integration",
-  "lastUpdated": "2025-12-10T05:03:53.492Z"
+  "arcadsAvatarId": "",
+  "autoGenerateVideos": false,
+  "wav2lipApiUrl": "https://test-wav2lip.railway.app",
+  "wav2lipAvatarImageUrl": "https://example.com/avatar.jpg",
+  "wav2lipEnabled": false,
+  "preferredVideoProvider": "arcads",
+  "lastUpdated": "2025-12-10T12:11:08.312Z"
 }

@@ -1,8 +1,11 @@
-import { Copy, Check, Clock, FileText } from "lucide-react";
+import { Copy, Check, Clock, FileText, Video, Loader2, ExternalLink, AlertCircle } from "lucide-react";
 import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import type { Script, ScriptType, Platform } from "@shared/schema";
 
 interface ScriptCardProps {
@@ -25,6 +28,42 @@ const platformColors: Record<Platform, string> = {
 
 export function ScriptCard({ script, onStatusChange }: ScriptCardProps) {
   const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: arcadsStatus } = useQuery<{ configured: boolean }>({
+    queryKey: ["/api/arcads/status"],
+  });
+
+  const { data: wav2lipStatus } = useQuery<{ configured: boolean; enabled: boolean }>({
+    queryKey: ["/api/wav2lip/status"],
+  });
+
+  const generateArcadsVideo = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", `/api/scripts/${script.id}/generate-video`);
+    },
+    onSuccess: () => {
+      toast({ title: "Video generation started (Arcads)" });
+      queryClient.invalidateQueries({ queryKey: ["/api/scripts"] });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Failed to generate video", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const generateWav2LipVideo = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", "/api/wav2lip/generate-video", { scriptId: script.id });
+    },
+    onSuccess: () => {
+      toast({ title: "Video generation started (Wav2Lip)" });
+      queryClient.invalidateQueries({ queryKey: ["/api/scripts"] });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Failed to generate video", description: error.message, variant: "destructive" });
+    },
+  });
 
   const handleCopy = async () => {
     const fullScript = `${script.hook}\n\n${script.body}\n\n${script.cta}`;
@@ -32,6 +71,10 @@ export function ScriptCard({ script, onStatusChange }: ScriptCardProps) {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const isVideoProcessing = script.videoStatus === "pending" || script.videoStatus === "generating";
+  const hasVideo = script.videoStatus === "complete" && script.videoUrl;
+  const videoFailed = script.videoStatus === "failed";
 
   const fullText = `${script.hook} ${script.body} ${script.cta}`;
 
@@ -82,35 +125,100 @@ export function ScriptCard({ script, onStatusChange }: ScriptCardProps) {
           </p>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
-        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Clock className="h-3 w-3" />
-            <span>{script.metadata.estimatedDuration}s</span>
+      <CardFooter className="flex flex-col gap-3 border-t border-border pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              <span>{script.metadata.estimatedDuration}s</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <FileText className="h-3 w-3" />
+              <span>{script.metadata.characterCount} chars</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1">
-            <FileText className="h-3 w-3" />
-            <span>{script.metadata.characterCount} chars</span>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCopy}
+            data-testid={`button-copy-${script.id}`}
+          >
+            {copied ? (
+              <>
+                <Check className="h-3 w-3" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Copy className="h-3 w-3" />
+                Copy
+              </>
+            )}
+          </Button>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleCopy}
-          data-testid={`button-copy-${script.id}`}
-        >
-          {copied ? (
+        
+        <div className="flex flex-wrap items-center gap-2 w-full">
+          {hasVideo ? (
+            <Button
+              variant="outline"
+              size="sm"
+              asChild
+              data-testid={`button-view-video-${script.id}`}
+            >
+              <a href={script.videoUrl!} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-3 w-3" />
+                View Video
+              </a>
+            </Button>
+          ) : isVideoProcessing ? (
+            <Badge variant="secondary" className="text-xs">
+              <Loader2 className="h-3 w-3 animate-spin mr-1" />
+              {script.videoStatus === "pending" ? "Queued" : "Generating"}
+            </Badge>
+          ) : videoFailed ? (
+            <Badge variant="destructive" className="text-xs">
+              <AlertCircle className="h-3 w-3 mr-1" />
+              Failed
+            </Badge>
+          ) : null}
+          
+          {!hasVideo && !isVideoProcessing && (
             <>
-              <Check className="h-3 w-3" />
-              Copied
-            </>
-          ) : (
-            <>
-              <Copy className="h-3 w-3" />
-              Copy
+              {wav2lipStatus?.configured && wav2lipStatus?.enabled && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => generateWav2LipVideo.mutate()}
+                  disabled={generateWav2LipVideo.isPending}
+                  data-testid={`button-generate-wav2lip-${script.id}`}
+                >
+                  {generateWav2LipVideo.isPending ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Video className="h-3 w-3" />
+                  )}
+                  Wav2Lip
+                </Button>
+              )}
+              {arcadsStatus?.configured && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => generateArcadsVideo.mutate()}
+                  disabled={generateArcadsVideo.isPending}
+                  data-testid={`button-generate-arcads-${script.id}`}
+                >
+                  {generateArcadsVideo.isPending ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Video className="h-3 w-3" />
+                  )}
+                  Arcads
+                </Button>
+              )}
             </>
           )}
-        </Button>
+        </div>
       </CardFooter>
     </Card>
   );

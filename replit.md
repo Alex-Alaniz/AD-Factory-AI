@@ -98,6 +98,11 @@ The application uses a hybrid approach where Drizzle/PostgreSQL is configured fo
 
 ## Recent Changes
 
+- **2025-12-10**: Added Wav2Lip open-source video generation integration
+  - New `server/wav2lip.ts` service module with TTS integration via OpenAI
+  - Settings page Wav2Lip configuration (API URL, avatar image URL, enable toggle)
+  - Script cards now show video generation buttons for both Arcads and Wav2Lip
+  - Supports self-hosted Wav2Lip API (e.g., on Railway with GPU)
 - **2025-12-10**: Added Arcads.ai API integration for video generation
   - New `server/arcads.ts` service module
   - Video status tracking (none, pending, generating, complete, failed)

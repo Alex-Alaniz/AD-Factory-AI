@@ -5,6 +5,7 @@ import { generateScripts } from "./openai";
 import { sendDailySummaryEmail, sendTestEmail } from "./resend";
 import { startCronJobs } from "./cron";
 import { createArcadsService } from "./arcads";
+import { createWav2LipService, getOpenAIClient } from "./wav2lip";
 import type { Platform, GenerationRequest, Script } from "@shared/schema";
 import { insertSettingsSchema } from "@shared/schema";
 import { z } from "zod";
@@ -172,6 +173,90 @@ export async function registerRoutes(
     const apiKey = process.env.ARCADS_API_KEY;
     res.json({
       configured: !!apiKey,
+    });
+  });
+  
+  // Generate video using Wav2Lip (self-hosted)
+  app.post("/api/wav2lip/generate-video", async (req, res) => {
+    try {
+      const { scriptId, avatarImageUrl } = req.body;
+      
+      if (!scriptId) {
+        return res.status(400).json({ error: "Script ID is required" });
+      }
+      
+      const script = await storage.getScriptById(scriptId);
+      if (!script) {
+        return res.status(404).json({ error: "Script not found" });
+      }
+      
+      // Check if video already being processed
+      if (script.videoStatus === "pending" || script.videoStatus === "generating") {
+        return res.status(400).json({ error: "Video is already being processed" });
+      }
+      
+      const settings = await storage.getSettings();
+      
+      if (!settings.wav2lipApiUrl) {
+        return res.status(400).json({ error: "Wav2Lip API URL not configured in settings" });
+      }
+      
+      const imageUrl = avatarImageUrl || settings.wav2lipAvatarImageUrl;
+      if (!imageUrl) {
+        return res.status(400).json({ error: "Avatar image URL is required" });
+      }
+      
+      const openaiClient = getOpenAIClient();
+      const wav2lip = createWav2LipService(settings.wav2lipApiUrl, openaiClient || undefined);
+      
+      if (!wav2lip) {
+        return res.status(500).json({ error: "Failed to initialize Wav2Lip service" });
+      }
+      
+      // Mark as pending
+      await storage.updateScriptVideo(scriptId, "pending", null, null);
+      
+      // Start generation
+      wav2lip.generateVideo(script, imageUrl)
+        .then(async (response) => {
+          await storage.updateScriptVideo(scriptId, "generating", null, response.jobId);
+          console.log(`Wav2Lip video generation started for script ${scriptId}, job: ${response.jobId}`);
+          
+          // Poll for completion in background
+          wav2lip.pollVideoCompletion(response.jobId)
+            .then(async (result) => {
+              await storage.updateScriptVideo(scriptId, "complete", result.videoUrl || null, result.jobId);
+              console.log(`Wav2Lip video complete for script ${scriptId}: ${result.videoUrl}`);
+            })
+            .catch(async (err) => {
+              console.error(`Wav2Lip video generation failed for script ${scriptId}:`, err);
+              await storage.updateScriptVideo(scriptId, "failed", null, response.jobId);
+            });
+        })
+        .catch(async (err) => {
+          console.error(`Failed to start Wav2Lip video generation for script ${scriptId}:`, err);
+          await storage.updateScriptVideo(scriptId, "failed", null, null);
+        });
+      
+      res.json({
+        success: true,
+        message: "Wav2Lip video generation started",
+        scriptId,
+      });
+    } catch (error) {
+      console.error("Error generating Wav2Lip video:", error);
+      res.status(500).json({ error: "Failed to generate video" });
+    }
+  });
+  
+  // Check Wav2Lip status
+  app.get("/api/wav2lip/status", async (req, res) => {
+    const settings = await storage.getSettings();
+    res.json({
+      configured: !!settings.wav2lipApiUrl,
+      apiUrl: settings.wav2lipApiUrl || null,
+      avatarImageUrl: settings.wav2lipAvatarImageUrl || null,
+      enabled: settings.wav2lipEnabled,
     });
   });
   
