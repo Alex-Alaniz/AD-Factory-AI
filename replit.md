@@ -2,14 +2,15 @@
 
 ## Overview
 
-Bearified Ad Factory is an AI-powered UGC (User Generated Content) marketing content generator designed for fintech app launches. The application generates 8-10 UGC-style video scripts daily using GPT-4, with support for multiple script types (product demo, founder story, skeptic-to-believer, feature highlight) and platforms (Twitter, TikTok, Instagram).
+Bearified Ad Factory is an AI-powered UGC (User Generated Content) marketing content generator designed for fintech app launches. The application generates 8-10 UGC-style video scripts every 3 hours using GPT-4, with support for multiple script types (product demo, founder story, skeptic-to-believer, feature highlight) and platforms (Twitter, TikTok, Instagram).
 
 Core capabilities include:
 - AI script generation via OpenAI GPT-4
 - Dashboard for tracking script status and statistics
-- Scheduled daily generation at 6 AM EST
+- Scheduled generation every 3 hours
 - Email notifications via Resend API
 - CSV export functionality
+- **Arcads.ai integration** for automated AI video generation from scripts
 
 ## User Preferences
 
@@ -38,6 +39,7 @@ Key backend modules:
 - `openai.ts` - GPT-4 integration with rate limiting and retry logic
 - `resend.ts` - Email service integration
 - `cron.ts` - Scheduled job management using node-cron
+- `arcads.ts` - Arcads.ai API integration for video generation
 
 ### Data Storage
 - **Primary Storage**: File-based JSON storage in `/data` directory
@@ -48,9 +50,20 @@ Key backend modules:
 The application uses a hybrid approach where Drizzle/PostgreSQL is configured for potential future use, but current implementation relies on JSON file storage for simplicity.
 
 ### Scheduling System
-- node-cron handles daily script generation at 6 AM EST (11 AM UTC)
+- node-cron handles script generation every 3 hours (`0 */3 * * *`)
 - Configurable auto-generation toggle in settings
 - Generates configurable number of scripts (default: 8) across all platforms
+
+### Video Generation (Arcads.ai)
+- **API Integration**: Arcads.ai private API for AI UGC video generation
+- **API Key**: Stored as environment secret `ARCADS_API_KEY` (not in settings file)
+- **Avatar Configuration**: Configurable avatar ID in settings
+- **Auto-Generation**: Optional toggle to automatically generate videos for new scripts
+- **Video Status Tracking**: Scripts track video status (none, pending, generating, complete, failed)
+- **Background Processing**: Video generation polls in background until complete
+- **Endpoints**:
+  - `POST /api/scripts/:id/generate-video` - Trigger video for specific script
+  - `GET /api/arcads/status` - Check if API key is configured
 
 ## External Dependencies
 
@@ -59,10 +72,16 @@ The application uses a hybrid approach where Drizzle/PostgreSQL is configured fo
 - Uses environment variables `AI_INTEGRATIONS_OPENAI_BASE_URL` and `AI_INTEGRATIONS_OPENAI_API_KEY`
 - Implements rate limiting (2 concurrent requests) and retry logic with p-limit and p-retry
 
+### Video Generation
+- **Arcads.ai API**: Private API for AI video generation
+- Requires `ARCADS_API_KEY` environment secret
+- Contact r@arcads.ai for API access
+- Supports avatar selection, voice settings, and batch processing
+
 ### Email Service
-- **Resend API**: For daily summary email notifications
+- **Resend API**: For summary email notifications
 - Credentials fetched dynamically via Replit Connectors API
-- Sends daily summaries with script counts and top hooks
+- Sends summaries with script counts and top hooks
 
 ### Database
 - **PostgreSQL**: Configured via `DATABASE_URL` environment variable
@@ -76,3 +95,13 @@ The application uses a hybrid approach where Drizzle/PostgreSQL is configured fo
 - `resend` - Email sending
 - `openai` - OpenAI API client
 - Radix UI primitives - Accessible component foundations
+
+## Recent Changes
+
+- **2025-12-10**: Added Arcads.ai API integration for video generation
+  - New `server/arcads.ts` service module
+  - Video status tracking (none, pending, generating, complete, failed)
+  - Settings page Arcads configuration section
+  - Tracking page video status column with view/download links
+  - Auto-generate videos option for new scripts
+- **2025-12-10**: Changed cron schedule from daily 6 AM EST to every 3 hours

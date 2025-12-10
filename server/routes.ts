@@ -22,6 +22,11 @@ async function triggerVideoGeneration(scripts: Script[]): Promise<void> {
   if (!arcads) return;
   
   for (const script of scripts) {
+    // Skip if video already being processed
+    if (script.videoStatus !== "none" && script.videoStatus !== undefined) {
+      continue;
+    }
+    
     try {
       // Mark as pending
       await storage.updateScriptVideo(script.id, "pending", null, null);
