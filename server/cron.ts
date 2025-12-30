@@ -1,10 +1,10 @@
-import cron from "node-cron";
+import cron, { type ScheduledTask } from "node-cron";
 import { storage } from "./storage";
 import { generateScripts } from "./openai";
 import { sendDailySummaryEmail } from "./resend";
 import type { Platform } from "@shared/schema";
 
-let cronJob: cron.ScheduledTask | null = null;
+let cronJob: ScheduledTask | null = null;
 
 export function startCronJobs() {
   // Schedule script generation every 3 hours

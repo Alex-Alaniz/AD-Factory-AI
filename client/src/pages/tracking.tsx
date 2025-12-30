@@ -115,7 +115,7 @@ export default function Tracking() {
         title: "Export Complete",
         description: "Scripts have been exported to CSV.",
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Export Failed",
         description: "Failed to export scripts. Please try again.",

@@ -1,5 +1,11 @@
+/**
+ * API route definitions for the Express server.
+ * Includes endpoints for scripts, settings, video generation, and more.
+ * @module routes
+ */
+
 import type { Express } from "express";
-import { createServer, type Server } from "http";
+import type { Server } from "http";
 import { storage } from "./storage";
 import { generateScripts } from "./openai";
 import { sendDailySummaryEmail, sendTestEmail } from "./resend";
@@ -10,7 +16,11 @@ import type { Platform, GenerationRequest, Script } from "@shared/schema";
 import { insertSettingsSchema } from "@shared/schema";
 import { z } from "zod";
 
-// Helper function to trigger video generation for scripts
+/**
+ * Triggers asynchronous video generation for a batch of scripts.
+ * Uses Arcads.ai if configured and auto-generation is enabled.
+ * @param scripts - Scripts to generate videos for
+ */
 async function triggerVideoGeneration(scripts: Script[]): Promise<void> {
   const settings = await storage.getSettings();
   const apiKey = process.env.ARCADS_API_KEY;
@@ -58,6 +68,14 @@ async function triggerVideoGeneration(scripts: Script[]): Promise<void> {
   }
 }
 
+/**
+ * Registers all API routes on the Express application.
+ * Also starts cron jobs for scheduled script generation.
+ *
+ * @param httpServer - The HTTP server instance
+ * @param app - The Express application
+ * @returns The HTTP server instance
+ */
 export async function registerRoutes(
   httpServer: Server,
   app: Express

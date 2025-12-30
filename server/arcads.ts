@@ -1,5 +1,12 @@
+/**
+ * Arcads.ai video generation service integration.
+ * Provides AI-powered avatar video creation from text scripts.
+ * @module arcads
+ */
+
 import type { Script, ArcadsVideoResponse } from "@shared/schema";
 
+/** Base URL for the Arcads API */
 const ARCADS_API_BASE = "https://api.arcads.ai/v1";
 
 interface ArcadsGenerateRequest {
@@ -19,15 +26,30 @@ interface ArcadsStatusResponse {
   error?: string;
 }
 
+/**
+ * Service for interacting with the Arcads.ai video generation API.
+ * Handles video creation and status polling.
+ */
 export class ArcadsService {
   private apiKey: string;
   private avatarId: string;
 
+  /**
+   * Creates an Arcads service instance.
+   * @param apiKey - Arcads API key for authentication
+   * @param avatarId - ID of the avatar to use for video generation
+   */
   constructor(apiKey: string, avatarId: string = "default") {
     this.apiKey = apiKey;
     this.avatarId = avatarId;
   }
 
+  /**
+   * Initiates video generation for a script.
+   * @param script - The script to generate a video for
+   * @returns Response with job ID and initial status
+   * @throws Error if API key is not configured or API call fails
+   */
   async generateVideo(script: Script): Promise<ArcadsVideoResponse> {
     if (!this.apiKey) {
       throw new Error("Arcads API key not configured");
@@ -73,6 +95,12 @@ export class ArcadsService {
     }
   }
 
+  /**
+   * Checks the current status of a video generation job.
+   * @param jobId - The job ID returned from generateVideo
+   * @returns Current status and video URL if complete
+   * @throws Error if API key is not configured or API call fails
+   */
   async checkVideoStatus(jobId: string): Promise<ArcadsVideoResponse> {
     if (!this.apiKey) {
       throw new Error("Arcads API key not configured");
@@ -105,6 +133,14 @@ export class ArcadsService {
     }
   }
 
+  /**
+   * Polls for video completion with configurable timeout.
+   * @param jobId - The job ID to poll
+   * @param maxAttempts - Maximum number of poll attempts (default: 30)
+   * @param intervalMs - Delay between polls in milliseconds (default: 10000)
+   * @returns Final status with video URL
+   * @throws Error if video generation fails or times out
+   */
   async pollVideoCompletion(
     jobId: string,
     maxAttempts: number = 30,
@@ -128,6 +164,13 @@ export class ArcadsService {
   }
 }
 
+/**
+ * Factory function to create an Arcads service instance.
+ * Returns null if API key is not provided.
+ * @param apiKey - Arcads API key
+ * @param avatarId - Avatar ID for video generation
+ * @returns ArcadsService instance or null
+ */
 export function createArcadsService(apiKey: string, avatarId: string): ArcadsService | null {
   if (!apiKey) {
     return null;

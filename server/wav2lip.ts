@@ -1,4 +1,4 @@
-import type { Script, Wav2LipVideoRequest, Wav2LipVideoResponse } from "@shared/schema";
+import type { Script, Wav2LipVideoResponse } from "@shared/schema";
 import OpenAI from "openai";
 
 export interface Wav2LipService {

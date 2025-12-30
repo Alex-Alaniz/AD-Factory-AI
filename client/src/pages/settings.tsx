@@ -18,16 +18,12 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: settings, isLoading } = useQuery<Settings>({
+  const { data: settings } = useQuery<Settings>({
     queryKey: ["/api/settings"],
   });
 
   const { data: arcadsStatus } = useQuery<{ configured: boolean }>({
     queryKey: ["/api/arcads/status"],
-  });
-
-  const { data: wav2lipStatus } = useQuery<{ configured: boolean; enabled: boolean; apiUrl: string | null }>({
-    queryKey: ["/api/wav2lip/status"],
   });
 
   const [formData, setFormData] = useState({

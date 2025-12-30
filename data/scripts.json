@@ -454,5 +454,485 @@
     "videoStatus": "none",
     "videoUrl": null,
     "videoJobId": null
+  },
+  {
+    "hook": "You need to see how fast Bearo sends money.",
+    "body": "I paid my friend back in seconds using HONEY, and it cost nothing. Literally zero fees. I hit send, and it landed instantly. No gas drama, no waiting, just smooth. Even tipped with $BEARCO for fun because memes belong in money.",
+    "cta": "Download Bearo and try an instant HONEY payment today.",
+    "type": "product-demo",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 326,
+      "estimatedDuration": 24,
+      "tone": "excited",
+      "wordCount": 59
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "aed8c3ec-cdec-4c30-9df6-963881778f5c",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Why we built Bearo for everyday crypto payments.",
+    "body": "My team hated paying fees to move money. So we launched HONEY, a stablecoin for instant transfers, and integrated $BEARCO because community matters. Bearo makes payments zero-fee, predictable, and fast, so anyone can click send without stress.",
+    "cta": "Join us on Bearo and make fees a memory.",
+    "type": "founder-story",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 333,
+      "estimatedDuration": 22,
+      "tone": "informative",
+      "wordCount": 54
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "60df0be3-dbc5-41cf-81c4-b53e47883bf2",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "I thought crypto payments were always a headache.",
+    "body": "My rent split used to fail and cost gas. Tried Bearo with HONEY—boom, instant and zero fees. Then my gamer friends sent me $BEARCO tips mid-stream. Okay, I’m converted. It feels like Venmo, but web3 actually working.",
+    "cta": "Give Bearo one try and change your mind.",
+    "type": "skeptic-to-believer",
+    "platform": "instagram",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 307,
+      "estimatedDuration": 21,
+      "tone": "persuasive",
+      "wordCount": 53
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "ffeec1f2-6bd9-4c5b-a481-eda2d91e5d3d",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Zero fees, instant, and a stable currency: HONEY.",
+    "body": "Bearo uses HONEY for day-to-day transfers, so your balance doesn’t swing. Payments settle in seconds worldwide. If you want fun, $BEARCO is integrated for tips and rewards. But paying bills? HONEY keeps it simple, fast, and free.",
+    "cta": "Switch to HONEY on Bearo and stop paying fees.",
+    "type": "feature-highlight",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 326,
+      "estimatedDuration": 22,
+      "tone": "informative",
+      "wordCount": 54
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "4f16dc49-7609-471d-9d1b-2a32cd804fdc",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Watch me pay my barber in under five seconds.",
+    "body": "Opened Bearo, chose HONEY, typed the amount, hit send. It cleared before he finished the fade—no fees, no awkward waiting. Then I tipped in $BEARCO because he’s hilarious. This is how payments should feel: instant and effortless.",
+    "cta": "Grab Bearo and try your next payment on HONEY.",
+    "type": "product-demo",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 322,
+      "estimatedDuration": 22,
+      "tone": "casual",
+      "wordCount": 55
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "205ff8e1-48c7-4e9b-a8bc-a8e154f21432",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "We built Bearo to make money feel modern.",
+    "body": "Banks charge, block, and delay. With HONEY on Bearo, payments are instant and free. And culture matters—$BEARCO lets communities tip, reward, and play. We combined stability and fun, so moving value is finally simple for everyone.",
+    "cta": "Join Bearo and be part of money that moves.",
+    "type": "founder-story",
+    "platform": "instagram",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 316,
+      "estimatedDuration": 21,
+      "tone": "persuasive",
+      "wordCount": 53
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "3d3616b4-678e-4fa5-9636-b18d335780bf",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "I didn’t trust stablecoins until I tried HONEY.",
+    "body": "Flaky tokens scared me. But HONEY on Bearo stayed steady while my payments landed instantly. No fee surprises, just click and done. The kicker? My friends use $BEARCO for fun perks. Now I use HONEY daily for groceries.",
+    "cta": "Test HONEY on Bearo with a small payment today.",
+    "type": "skeptic-to-believer",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 314,
+      "estimatedDuration": 22,
+      "tone": "casual",
+      "wordCount": 55
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "8bd119c6-1ccf-4851-a2ba-1b9d9866cfb5",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Memes meet money: $BEARCO tips inside Bearo.",
+    "body": "I pay bills with HONEY because it’s stable and free. But when my friend drops a great thread, I boost them with $BEARCO. It’s instant, no fees, and actually fun. Bearo makes payments practical but keeps the vibe.",
+    "cta": "Download Bearo and start tipping with $BEARCO today.",
+    "type": "feature-highlight",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 310,
+      "estimatedDuration": 21,
+      "tone": "excited",
+      "wordCount": 53
+    },
+    "generatedBatch": "1c13a106-50e7-468d-95f0-7de810ab152d",
+    "id": "7c618575-8481-4626-a9f5-92a593b6ac8f",
+    "createdAt": "2025-12-11T00:00:34.709Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "I just sent money faster than a text.",
+    "body": "Opened Bearo, tapped pay, done—no fees, no lag. My friend got HONEY instantly, and I didn’t pay a cent. It feels like Venmo, but crypto-native and lightning quick.",
+    "cta": "Download Bearo and try your first instant HONEY payment.",
+    "type": "product-demo",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 258,
+      "estimatedDuration": 18,
+      "tone": "excited",
+      "wordCount": 45
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "53320478-b84d-45f9-9f8d-e08a3c08ce20",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Thought it was another sketchy crypto app.",
+    "body": "Tried sending ten bucks to my roommate with Bearo. No fee popped up. He received HONEY instantly and swapped to cash in minutes. Okay, fine—I’m keeping it on my home screen.",
+    "cta": "Give Bearo one shot and prove me wrong.",
+    "type": "skeptic-to-believer",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 256,
+      "estimatedDuration": 18,
+      "tone": "casual",
+      "wordCount": 46
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "76689ddf-5009-4769-a7f5-7ec7d52c7557",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Stable like cash, fast like crypto.",
+    "body": "Bearo runs on HONEY, a dollar-pegged stablecoin for everyday payments. Send across borders instantly with zero fees. Want some fun? Connect $BEARCO for perks while keeping your spending steady in HONEY.",
+    "cta": "Download Bearo and make your first HONEY transfer.",
+    "type": "feature-highlight",
+    "platform": "instagram",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 289,
+      "estimatedDuration": 18,
+      "tone": "informative",
+      "wordCount": 45
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "f78743d3-c1e8-41df-84f6-daa9fa116122",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "We built Bearo because payments shouldn’t suck.",
+    "body": "Friends across three countries, and splitting dinner cost us more than dessert. So we made HONEY transfers instant with zero fees, and integrated $BEARCO for community rewards. Sending money should feel joyful, not painful.",
+    "cta": "Join Bearo and help fix payments with us.",
+    "type": "founder-story",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 313,
+      "estimatedDuration": 20,
+      "tone": "persuasive",
+      "wordCount": 49
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "ad047031-94f5-47f6-800c-bbe2f8649520",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Paid for coffee before the barista blinked.",
+    "body": "Opened Bearo, scanned their code, sent HONEY. No card fees, no waiting—the receipt hit both phones instantly. My bank app could never. Splitting with a friend? Same flow, still zero fees.",
+    "cta": "Grab a coffee and try Bearo’s instant checkout.",
+    "type": "product-demo",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 279,
+      "estimatedDuration": 18,
+      "tone": "casual",
+      "wordCount": 46
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "0d8575eb-177e-4a76-9cfd-7e16b0eae758",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "I swore off crypto after the last fiasco.",
+    "body": "Bearo felt different: HONEY stays pegged to a dollar, so paying my rent doesn’t yo-yo. Transfers land instantly, and fees? Zero. I still hold some $BEARCO for fun, but I pay daily with HONEY.",
+    "cta": "Try Bearo for bills, not hype. It works.",
+    "type": "skeptic-to-believer",
+    "platform": "instagram",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 274,
+      "estimatedDuration": 20,
+      "tone": "persuasive",
+      "wordCount": 50
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "02eea8f6-6475-4572-b897-9165e4a80834",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Zero fees. Cross-border. Instant. I’m obsessed.",
+    "body": "Bearo lets me pay family overseas in HONEY instantly, and it doesn’t nibble away small transfers with charges. We keep $BEARCO for community drops, but day-to-day, HONEY just sends and settles—like texting money.",
+    "cta": "Download Bearo and send your first free transfer today.",
+    "type": "feature-highlight",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 316,
+      "estimatedDuration": 19,
+      "tone": "excited",
+      "wordCount": 48
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "cc5e313c-ab11-4a7c-884a-42aa914334b4",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Our mission: payments that move at internet speed.",
+    "body": "We designed Bearo around HONEY for stability and instant settlement, so people can send $5 or $5000 without fees. $BEARCO brings community energy and rewards, but utility stays simple: tap, send, confirmed.",
+    "cta": "Be part of it. Download Bearo and build better payments.",
+    "type": "founder-story",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 314,
+      "estimatedDuration": 20,
+      "tone": "informative",
+      "wordCount": 50
+    },
+    "generatedBatch": "3d371416-d1c5-4e89-9a18-05ef3794f0a0",
+    "id": "21af94cc-b4b8-41cd-b1c8-02f6b4e33e54",
+    "createdAt": "2025-12-11T09:00:46.893Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "This payment literally hit before my coffee cooled.",
+    "body": "I sent rent to my roommate on Bearo and it landed instantly. No pending, no waiting, and seriously zero fees. The HONEY stablecoin keeps the amount steady, so what I send is exactly what they get.",
+    "cta": "Download Bearo and try a HONEY transfer.",
+    "type": "product-demo",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 289,
+      "estimatedDuration": 20,
+      "tone": "excited",
+      "wordCount": 51
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "ea4e7b97-bce7-4749-8ddf-f065535dc265",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Why we built Bearo in a weekend hackathon.",
+    "body": "Friends kept losing money to transfer fees and slow rails. We wanted instant payments with a steady unit, so we launched HONEY as the stablecoin. Then we added $BEARCO for community rewards without complicating the experience.",
+    "cta": "Join the build—download Bearo and send your first HONEY.",
+    "type": "founder-story",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 326,
+      "estimatedDuration": 21,
+      "tone": "informative",
+      "wordCount": 53
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "ed0fc4f8-f3bd-46f5-825c-98dcfef76419",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "I thought “instant crypto” was marketing fluff.",
+    "body": "Tried Bearo to pay a freelancer overseas. It was in their wallet instantly, no gas drama, and zero fees. HONEY kept the amount stable, so there were no surprises from price swings. Okay, I’m convinced.",
+    "cta": "Give it one payment and see for yourself.",
+    "type": "skeptic-to-believer",
+    "platform": "instagram",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 291,
+      "estimatedDuration": 20,
+      "tone": "casual",
+      "wordCount": 50
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "3afce980-6d59-4e7e-b67e-ba9ce95644e6",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Payments meet memes, without sacrificing utility.",
+    "body": "Bearo uses HONEY for day-to-day stability, but lets you plug in $BEARCO for tips, perks, and community drops. You get instant, fee-free transfers for serious stuff, and playful rewards when you want to vibe.",
+    "cta": "Download Bearo and switch between HONEY and $BEARCO.",
+    "type": "feature-highlight",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 310,
+      "estimatedDuration": 19,
+      "tone": "persuasive",
+      "wordCount": 48
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "1537f25a-5315-42cc-9fcf-217de45788de",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Paid back brunch before we left the table.",
+    "body": "Opened Bearo, tapped my friend, sent HONEY, done. It hit instantly with zero fees, so splitting bills isn’t awkward anymore. We even tossed $BEARCO tips for fun. Honestly, it feels like texting money.",
+    "cta": "Grab Bearo and make your next split painless.",
+    "type": "product-demo",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 289,
+      "estimatedDuration": 20,
+      "tone": "casual",
+      "wordCount": 49
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "807e6d02-2b84-4976-818c-727417b4c425",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Cross-border in seconds, not days or weeks.",
+    "body": "I send family support abroad. Banks took days and charged fees. On Bearo, HONEY lands instantly, fee-free, and the amount doesn’t fluctuate. The process was simple: verify, deposit, send. No surprises, just fast, predictable transfers.",
+    "cta": "Test one transfer today and compare your costs.",
+    "type": "skeptic-to-believer",
+    "platform": "instagram",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 327,
+      "estimatedDuration": 20,
+      "tone": "informative",
+      "wordCount": 50
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "a9a0c5a7-678f-495a-bd3a-fd4b5d2c5de4",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "Zero fees is not a promo - it's default.",
+    "body": "Every time I pay with HONEY on Bearo, I keep the full amount. No hidden gas, no weird network add-ons, and it’s instant. That changes how often I pay people back and tip creators.",
+    "cta": "Download Bearo and stop paying to pay.",
+    "type": "feature-highlight",
+    "platform": "twitter",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 259,
+      "estimatedDuration": 20,
+      "tone": "excited",
+      "wordCount": 50
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "f0ef0c76-698d-46c2-8125-320e28b2dcfb",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
+  },
+  {
+    "hook": "We’re building money that feels like messaging.",
+    "body": "Bearo’s HONEY stablecoin keeps value steady, so payments are predictable. We obsess over speed and simplicity - instant, fee-free transfers that anyone can use. $BEARCO adds community energy without friction. If payments felt heavy before, try this.",
+    "cta": "Join Bearo and help shape the future of paying.",
+    "type": "founder-story",
+    "platform": "tiktok",
+    "status": "pending",
+    "metadata": {
+      "characterCount": 345,
+      "estimatedDuration": 21,
+      "tone": "persuasive",
+      "wordCount": 53
+    },
+    "generatedBatch": "15399a4a-190c-44ce-b8a4-3d2cf516d8c8",
+    "id": "8a3c7293-d55e-4ac4-b81c-f58ca541437a",
+    "createdAt": "2025-12-30T15:00:25.524Z",
+    "videoStatus": "none",
+    "videoUrl": null,
+    "videoJobId": null
   }
 ]

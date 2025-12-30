@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, Sparkles } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { ScriptCard } from "@/components/script-card";
 import { GenerateDialog } from "@/components/generate-dialog";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -13,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Script, Platform, ScriptType, ScriptStatus } from "@shared/schema";
+import type { Script } from "@shared/schema";
 
 export default function Scripts() {
   const [search, setSearch] = useState("");

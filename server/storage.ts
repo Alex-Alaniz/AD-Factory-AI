@@ -1,7 +1,12 @@
+/**
+ * File-based storage implementation for scripts and settings.
+ * Provides persistence using JSON files in the data directory.
+ * @module storage
+ */
+
 import { randomUUID } from "crypto";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import type { Script, InsertScript, Settings, InsertSettings, DashboardStats } from "@shared/schema";
 
 // Use absolute path from project root for consistent storage location
@@ -9,8 +14,11 @@ const DATA_DIR = path.resolve(process.cwd(), "data");
 const SCRIPTS_FILE = path.join(DATA_DIR, "scripts.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 
-// Ensure data directory exists
-function ensureDataDir() {
+/**
+ * Ensures the data directory and its subdirectories exist.
+ * Creates scripts, exports, and assets folders if missing.
+ */
+function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
@@ -24,6 +32,10 @@ function ensureDataDir() {
   }
 }
 
+/**
+ * Loads scripts from the JSON file.
+ * @returns Array of scripts, empty array if file doesn't exist or on error
+ */
 function loadScripts(): Script[] {
   ensureDataDir();
   try {
@@ -37,11 +49,20 @@ function loadScripts(): Script[] {
   return [];
 }
 
-function saveScripts(scripts: Script[]) {
+/**
+ * Saves scripts to the JSON file.
+ * @param scripts - Array of scripts to save
+ */
+function saveScripts(scripts: Script[]): void {
   ensureDataDir();
   fs.writeFileSync(SCRIPTS_FILE, JSON.stringify(scripts, null, 2));
 }
 
+/**
+ * Loads settings from the JSON file.
+ * Returns default settings if file doesn't exist or on error.
+ * @returns Settings object with all configuration values
+ */
 function loadSettings(): Settings {
   ensureDataDir();
   const defaults: Settings = {
@@ -69,34 +90,60 @@ function loadSettings(): Settings {
   return defaults;
 }
 
-function saveSettings(settings: Settings) {
+/**
+ * Saves settings to the JSON file.
+ * @param settings - Settings object to persist
+ */
+function saveSettings(settings: Settings): void {
   ensureDataDir();
   fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));
 }
 
+/**
+ * Storage interface defining all persistence operations.
+ * Implementations can use different backends (file, database, etc.)
+ */
 export interface IStorage {
-  // Scripts
+  // Script operations
+  /** Retrieves all scripts, sorted by creation date descending */
   getAllScripts(): Promise<Script[]>;
+  /** Retrieves the most recent scripts up to the specified limit */
   getRecentScripts(limit?: number): Promise<Script[]>;
+  /** Finds a script by its unique ID */
   getScriptById(id: string): Promise<Script | undefined>;
+  /** Creates a new script and returns it with generated ID and timestamp */
   createScript(script: InsertScript): Promise<Script>;
+  /** Creates multiple scripts in a single operation */
   createManyScripts(scripts: InsertScript[]): Promise<Script[]>;
+  /** Updates a script's status (pending, used, archived) */
   updateScriptStatus(id: string, status: Script["status"]): Promise<Script | undefined>;
+  /** Updates video generation status and URL for a script */
   updateScriptVideo(id: string, videoStatus: Script["videoStatus"], videoUrl: string | null, videoJobId: string | null): Promise<Script | undefined>;
+  /** Retrieves scripts with pending or generating video status */
   getScriptsWithPendingVideos(): Promise<Script[]>;
+  /** Deletes a script by ID, returns true if found and deleted */
   deleteScript(id: string): Promise<boolean>;
-  
-  // Settings
+
+  // Settings operations
+  /** Retrieves the current application settings */
   getSettings(): Promise<Settings>;
+  /** Updates application settings with partial data */
   updateSettings(settings: Partial<InsertSettings>): Promise<Settings>;
-  
-  // Stats
+
+  // Statistics
+  /** Retrieves dashboard statistics */
   getStats(): Promise<DashboardStats>;
-  
+
   // Export
+  /** Exports all scripts to CSV format */
   exportScriptsToCSV(): Promise<string>;
 }
 
+/**
+ * File-based implementation of IStorage.
+ * Persists data to JSON files in the data directory.
+ * Scripts are also saved to date-organized folders.
+ */
 export class FileStorage implements IStorage {
   private scripts: Script[] = [];
   private settings: Settings;

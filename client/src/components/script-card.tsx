@@ -10,7 +10,6 @@ import type { Script, ScriptType, Platform } from "@shared/schema";
 
 interface ScriptCardProps {
   script: Script;
-  onStatusChange?: (id: string, status: Script["status"]) => void;
 }
 
 const typeLabels: Record<ScriptType, string> = {
@@ -26,7 +25,7 @@ const platformColors: Record<Platform, string> = {
   instagram: "bg-purple-500/10 text-purple-400 border-purple-500/20",
 };
 
-export function ScriptCard({ script, onStatusChange }: ScriptCardProps) {
+export function ScriptCard({ script }: ScriptCardProps) {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -75,8 +74,6 @@ export function ScriptCard({ script, onStatusChange }: ScriptCardProps) {
   const isVideoProcessing = script.videoStatus === "pending" || script.videoStatus === "generating";
   const hasVideo = script.videoStatus === "complete" && script.videoUrl;
   const videoFailed = script.videoStatus === "failed";
-
-  const fullText = `${script.hook} ${script.body} ${script.cta}`;
 
   return (
     <Card className="flex flex-col" data-testid={`card-script-${script.id}`}>

@@ -41,7 +41,7 @@ export function GenerateDialog({ defaultFeatures = "", trigger }: GenerateDialog
         count: count[0],
         platforms,
       });
-      return response;
+      return response as { scripts?: { length: number } };
     },
     onSuccess: (data) => {
       toast({

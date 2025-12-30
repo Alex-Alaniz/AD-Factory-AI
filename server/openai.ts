@@ -1,7 +1,12 @@
+/**
+ * OpenAI integration for generating UGC-style video scripts.
+ * Uses GPT-4 with rate limiting and retry logic.
+ * @module openai
+ */
+
 import OpenAI from "openai";
-import pLimit from "p-limit";
-import pRetry from "p-retry";
-import type { Script, ScriptType, Platform, Tone, InsertScript } from "@shared/schema";
+import pRetry, { AbortError } from "p-retry";
+import type { ScriptType, Platform, Tone, InsertScript } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 // This is using Replit's AI Integrations service, which provides OpenAI-compatible API access without requiring your own API key.
@@ -10,9 +15,14 @@ const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY
 });
 
-// Helper function to check if error is rate limit or quota violation
-function isRateLimitError(error: any): boolean {
-  const errorMsg = error?.message || String(error);
+/**
+ * Checks if an error is a rate limit or quota violation.
+ * Used to determine retry behavior for API calls.
+ * @param error - The error to check
+ * @returns True if the error is a rate limit error
+ */
+function isRateLimitError(error: unknown): boolean {
+  const errorMsg = (error as Error)?.message || String(error);
   return (
     errorMsg.includes("429") ||
     errorMsg.includes("RATELIMIT_EXCEEDED") ||
@@ -24,12 +34,22 @@ function isRateLimitError(error: any): boolean {
 const scriptTypes: ScriptType[] = ["product-demo", "founder-story", "skeptic-to-believer", "feature-highlight"];
 const tones: Tone[] = ["excited", "casual", "informative", "persuasive"];
 
+/**
+ * Selects a random element from an array.
+ * @param array - Array to select from
+ * @returns A random element from the array
+ */
 function getRandomElement<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+/**
+ * Estimates speaking duration for text content.
+ * Uses average speaking rate of 150 words per minute (2.5 words/second).
+ * @param text - The text content to estimate duration for
+ * @returns Estimated duration in seconds
+ */
 function estimateDuration(text: string): number {
-  // Average speaking rate is about 150 words per minute = 2.5 words per second
   const wordCount = text.split(/\s+/).length;
   return Math.round(wordCount / 2.5);
 }
@@ -42,12 +62,22 @@ interface GeneratedScript {
   tone: Tone;
 }
 
+/**
+ * Generates UGC-style video scripts using GPT-4.
+ * Creates scripts with hook, body, and CTA components.
+ * Includes retry logic for rate limit handling.
+ *
+ * @param productFeatures - Description of product features to highlight
+ * @param count - Number of scripts to generate
+ * @param platforms - Target social media platforms (distributed round-robin)
+ * @returns Array of generated script objects ready for storage
+ * @throws Error if script generation or parsing fails
+ */
 export async function generateScripts(
   productFeatures: string,
   count: number,
   platforms: Platform[]
 ): Promise<InsertScript[]> {
-  const limit = pLimit(2); // Process up to 2 requests concurrently
   const batchId = randomUUID();
   
   const prompt = `Generate ${count} unique UGC-style video scripts for Bearo, a crypto fintech app.
@@ -80,11 +110,11 @@ Return a JSON object with a "scripts" key containing an array of script objects.
             response_format: { type: "json_object" },
           });
           return completion;
-        } catch (error: any) {
+        } catch (error) {
           if (isRateLimitError(error)) {
             throw error;
           }
-          throw new pRetry.AbortError(error);
+          throw new AbortError(error instanceof Error ? error : new Error(String(error)));
         }
       },
       {
@@ -138,6 +168,9 @@ Return a JSON object with a "scripts" key containing an array of script objects.
           wordCount: fullText.split(/\s+/).length,
         },
         generatedBatch: batchId,
+        videoStatus: "none",
+        videoUrl: null,
+        videoJobId: null,
       });
     }
   } catch (error) {

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { FileText, Clock, CheckCircle, Archive, Calendar, Sparkles } from "lucide-react";
+import { FileText, Clock, CheckCircle, Calendar, Sparkles } from "lucide-react";
 import { StatsCard } from "@/components/stats-card";
 import { ScriptCard } from "@/components/script-card";
 import { GenerateDialog } from "@/components/generate-dialog";
