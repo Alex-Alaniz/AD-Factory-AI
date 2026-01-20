@@ -1,0 +1,20 @@
+{
+  "hook": "Paid for coffee before the receipt even printed.",
+  "body": "Opened Bearo, scanned the café’s QR, sent HONEY. The barista got it instantly, and there were zero fees for them, zero for me. I tipped a little $BEARCO because…why not? The checkout felt smoother than tap-to-pay.",
+  "cta": "Grab Bearo and try a QR HONEY payment.",
+  "type": "product-demo",
+  "platform": "tiktok",
+  "status": "pending",
+  "metadata": {
+    "characterCount": 301,
+    "estimatedDuration": 21,
+    "tone": "casual",
+    "wordCount": 52
+  },
+  "generatedBatch": "27277a62-ade8-4c83-b907-92fe395ced1f",
+  "id": "a2ade431-a8f2-4980-bf4d-c163a0b33e6a",
+  "createdAt": "2025-12-31T06:00:23.822Z",
+  "videoStatus": "none",
+  "videoUrl": null,
+  "videoJobId": null
+}
